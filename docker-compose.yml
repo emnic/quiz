@@ -1,0 +1,12 @@
+web:
+  image: 'emnic/quiz:latest'
+  volumes:
+  - './:/usr/src/app/'
+  - './public:/usr/src/app/public'
+
+  command: 'npm start'
+  environment:
+  - PORT=3000
+
+  ports:
+  - '3000:3000'
