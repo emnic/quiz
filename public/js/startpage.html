@@ -1,0 +1,42 @@
+<div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="#">Home</a></li>
+            <li role="presentation"><a href="#">About</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Christmas AW-Quiz</h3>
+      </div>
+
+      <div class="jumbotron">
+        <h1>Congratulations!!!</h1>
+        <p class="lead">You have found the entrance for the afterwork quiz/puzzle which will be opened during the weekend.</p> 
+        <p>Fantastic prices for the first three persons that make it all the way to the end!!! =) </p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button">Startr</a></p>
+      </div>
+
+      <footer class="footer">
+        <p>&copy; 2016 Christmas Party Commitee</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+     <div>
+<label>Name:</label>
+<input type="text" ng-model="yourName" placeholder="Enter a name here">
+<hr>
+<h1>Hello {{yourName}}!</h1>
+</div>
+  <b>Congratulations!!!</b>
+  <br>
+  <br>
+  You have found the entrance for the afterwork quiz/puzzle which will be opened during the weekend.
+  <br>
+
+  <form action="/guess" method="POST" target="">
+  	<input type="text" placeholder="name" name="number">
+  	<button type="submit">Submit</button>
+  </form>
+  <br>
+  Fantastic prices for the first three correct answers!!!  =)

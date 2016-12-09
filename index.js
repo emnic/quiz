@@ -1,20 +1,30 @@
-const express = require('express');
-const bodyParser= require('body-parser')
+var express = require('express');
+var bodyParser= require('body-parser')
+var path = require('path');
 
-const app = express();
+var app = express();
 
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(express.static(path.join(__dirname, 'public')));
+//app.set('public', path.join(__dirname, 'public'));
+//app.use('/public',express.static(path.join(__dirname, 'public')));
+
 secret_number = 0;
 guess_counter = 0;
 prev_guess = 0;
 
 app.get('/', (req, res) => {
-
   // Calculate the secret number
   secret_number = Math.floor((Math.random() * 100) + 1)
   guess_counter = Math.floor((Math.random() * 4) + 1);
-
+console.log(secret_number);
   res.sendFile(__dirname + '/public/index.html')
+});
+
+app.get('/first', (req, res) => {
+
+  
+  res.sendFile(__dirname + '/public/first.html')
 });
 
 app.post('/guess', (req, res) => {
@@ -22,6 +32,7 @@ app.post('/guess', (req, res) => {
   //console.log(req.body.number)
   //console.log(!isNaN(req.body.number));
   user_guess = req.body.number;
+  console.log(user_guess)
   console.log(secret_number);
 
   result = 0;
