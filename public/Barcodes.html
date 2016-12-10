@@ -1,0 +1,43 @@
+<div class="jumbotron">
+  <h2>Barcodes</h2>
+  <p class="lead">Find the secre key</p>
+</div>
+<br>
+<div class="row">
+	<div class="col-lg-2">
+		<img class="logo visible-lg" src="images/Barcode1.png" alt="Barcode1" style="width:100%;height:100%;">
+		<img class="logo visible-md" src="images/Barcode1.png" alt="Barcode1" style="width:30%;height:30%;">
+		<img class="logo visible-sm" src="images/Barcode1.png" alt="Barcode1" style="width:30%;height:30%;">
+		<img class="logo visible-xs" src="images/Barcode1.png" alt="Barcode1" style="width:30%;height:30%;">
+	</div>
+	<div class="col-lg-2">
+		<h1> + </h1>
+	</div>
+	<div class="col-lg-2">
+		<img class="logo visible-lg" src="images/Barcode2.png" alt="Barcode1" style="width:100%;height:100%;">
+		<img class="logo visible-md" src="images/Barcode2.png" alt="Barcode1" style="width:30%;height:30%;">
+		<img class="logo visible-sm" src="images/Barcode2.png" alt="Barcode1" style="width:30%;height:30%;">
+		<img class="logo visible-xs" src="images/Barcode2.png" alt="Barcode1" style="width:30%;height:30%;">
+	</div>
+	<div class="col-lg-2">
+		<h1> = </h1>
+	</div>
+	<div class="col-lg-4">
+		<h1> Secret Key </h1>
+	</div>
+</div>
+<br>
+<br>
+<div class="row">	
+	<form ng-controller="guessController" name="form">
+		<fieldset class="form-group">
+			<label for="inputUser">Result:</label>
+			<br>
+			{{response.result}}
+			<input class="form-control" placeholder="Input secret key" type="text" id="guess" ng-model="key"/>
+		</fieldset>
+		<p>
+		<button type="submit" class="btn btn-primary pull-center" ng-click="newPage(key)">Next Level</button>
+		</p>
+	</form>	
+</div>
