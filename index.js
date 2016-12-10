@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser= require('body-parser')
 var path = require('path');
+var jsonfile = require('jsonfile')
 
 var app = express();
 
@@ -12,6 +13,7 @@ var secret_number = 0;
 var guess_counter = 0;
 var prev_guess = 0;
 var cons_corr_counter = 0;
+var old_IP = 0;
 
 app.get('/guessreset', (req, res) => {
 
@@ -105,7 +107,42 @@ app.post('/checknav', (req, res) => {
 
 	res.json({'result':result});
 })
+app.get('/checkwinner', (req, res) => {
+	var file = 'data.json';
+	var data = jsonfile.readFileSync(file);
+	var secret_key = '';
 
+	var IP = req.headers['x-forwarded-for'];
+
+	if(old_IP === IP){
+		message = 'Sorry the result will be the same no matter how much you try';
+	}
+	else{ 
+		data.counter = data.counter + 1;
+		jsonfile.writeFileSync(file, data)
+
+		// Check for winning password
+		if(data.counter == 1){
+			secret_key = 'BESTÅ'
+		}
+		else if(data.counter == 2){
+			secret_key = 'KALLAX'
+		}
+		else if(data.counter == 3){
+			secret_key = 'TOMNÄS'
+		}	
+
+		if(data.counter <= 3){
+			message = "Of course you are a winner and you are also one of the lucky three. You finished in place: " + data.counter + ", The secret password is: " + secret_key;
+	  	}
+	  	else{
+	  		message = "Of course you are a winner but you are not one of the lucky three. Your position is: " +  data.counter;
+	  	}
+	}
+	console.log(message)
+  	old_IP = IP;
+  	res.json({'result':message})
+});
 
 app.listen(3001, function() {
   console.log('listening on 3001')

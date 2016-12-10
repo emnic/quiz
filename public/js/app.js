@@ -45,8 +45,17 @@ quizApp.controller('mainController', function($scope, $http, $location) {
             })
             .error(function(){
 
-        });
-        
+        });        
+    };
+    $scope.checkWinner = function (url){
+        $http.get('/checkwinner')
+            .success(function(response){
+
+                $scope.message = response.result          
+            })
+            .error(function(){
+
+        });        
     };
 });
 quizApp.controller('guessController', function($scope, $http, $location) {
