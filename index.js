@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser= require('body-parser')
 var path = require('path');
 var jsonfile = require('jsonfile')
+var nodemailer = require('nodemailer');
 
 var app = express();
 
@@ -107,7 +108,8 @@ app.post('/checknav', (req, res) => {
 
 	res.json({'result':result});
 })
-app.get('/checkwinner', (req, res) => {
+app.post('/checkwinner', (req, res) => {
+	var user = req.body;
 	var file = 'data.json';
 	var data = jsonfile.readFileSync(file);
 	var secret_key = '';
@@ -141,10 +143,61 @@ app.get('/checkwinner', (req, res) => {
 	}
 	console.log(message)
   	old_IP = IP;
+ 	
+ 	console.log(user)
+  	mail = createMail(user.name, data.counter, secret_key);
+  	
+  	sendConfirmMail(user, res, mail)
   	res.json({'result':message})
 });
 
+function sendConfirmMail(user, res, mail) {
+	// Not the movie transporter!
+	var transporter = nodemailer.createTransport({
+		service: 'Gmail',
+		auth: {
+			user: 'noreply.awquiz@gmail.com',
+			pass: 'Test12345'
+		}
+	});
+
+
+	
+	var mailOptions = {
+		from: 'noreply.awquiz@gmail.com', // sender address
+		to: user.email, // list of receivers
+		bcc: 'noreply.awquiz@gmail.com',
+		subject: 'AW-quiz result', // Subject line
+		text: mail //, // plaintext body
+		// html: '<b>Hello world ✔</b>' // You can choose to send an HTML body instead
+	};
+	transporter.sendMail(mailOptions, function(error, info){
+		if(error){
+			console.log(error);
+			console.log('ErrorError')
+		//res.json({yo: 'error'});
+		}else{
+			console.log('Message sent: ' + info.response);
+		};
+	});
+};
+
+function createMail(name, place, secret_key){
+	heading = 'Hi ' + name + '!\n\n'
+	text = 'Thanks for participating. You finished at place: ' + place + '\n\n\n'
+	extra_text = 'Your secret password is: ' + secret_key + '\n\n\n'
+	ending = 'Best regards\nChristmas Party Committee'
+
+	if (secret_key){
+		mail = heading + text + extra_text + ending;
+	}
+	else{
+		mail = heading + text + ending;
+	}
+
+	return mail;
+}
 app.listen(3001, function() {
-  console.log('listening on 3001')
+ 	console.log('listening on 3001')
 })
 

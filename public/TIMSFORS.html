@@ -5,13 +5,6 @@
 <form ng-submit="guessNumber()" ng-controller="guessController" name="form">
 	<fieldset class="form-group">
 		<div class="col-lg-4">
-			<label for="inputUser">Result:</label>
-			<br>
-			{{response.result}}
-			<br>
-			<br>
-		</div>
-		<div class="col-lg-4">
 			<label for="inputUser">Number of guesses:</label>
 			<br>
 			{{response.guess_counter}}
@@ -24,9 +17,14 @@
 			{{response.cons_corr_counter}}
 			<br>
 			<br>
+		</div>
+		<div class="col-lg-4">
+			<label for="inputUser">Result:</label>
+			<br>
+			{{response.result}}
+			<br>
+			<br>
 		</div>		
-		<br>
-		<br>
 		<br>
 		<br>
 		<input class="form-control" placeholder="{{placeholderText}}" type="text" id="guess" ng-model="guess"/>

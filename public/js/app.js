@@ -48,7 +48,8 @@ quizApp.controller('mainController', function($scope, $http, $location) {
         });        
     };
     $scope.checkWinner = function (url){
-        $http.get('/checkwinner')
+        $scope.show = true;
+        $http.post('/checkwinner', {'name':$scope.name, 'email':$scope.email})
             .success(function(response){
 
                 $scope.message = response.result          
