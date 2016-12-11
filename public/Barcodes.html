@@ -28,16 +28,18 @@
 </div>
 <br>
 <br>
-<div class="row">	
-	<form ng-controller="guessController" name="form">
-		<fieldset class="form-group">
-			<label for="inputUser">Result:</label>
-			<br>
-			{{response.result}}
-			<input class="form-control" placeholder="Input secret key" type="text" id="guess" ng-model="key"/>
-		</fieldset>
-		<p>
-		<button type="submit" class="btn btn-primary pull-center" ng-click="newPage(key)">Next Level</button>
-		</p>
-	</form>	
+<div class="row">
+	<div class="col-lg-12">	
+		<form ng-controller="guessController" name="form">
+			<fieldset class="form-group">
+				<label for="inputUser">Result:</label>
+				<br>
+				{{response.result}}
+				<input class="form-control" placeholder="Input secret key" type="text" id="guess" ng-model="key"/>
+			</fieldset>
+			<p>
+			<button type="submit" class="btn btn-primary pull-center" ng-click="newPage(key)">Next Level</button>
+			</p>
+		</form>
+	</div>	
 </div>

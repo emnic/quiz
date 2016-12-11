@@ -113,14 +113,20 @@ app.post('/checkwinner', (req, res) => {
 	var file = 'data.json';
 	var data = jsonfile.readFileSync(file);
 	var secret_key = '';
+	duplicate = false;
 
-	var IP = req.headers['x-forwarded-for'];
+	for(i = 0; i < data.user.length; i++){
+		if(data.user[i].email === user.email){
+			duplicate = true;
+		}
+	}
 
-	if(old_IP === IP){
-		message = 'Sorry the result will be the same no matter how much you try';
+	if(duplicate){
+		message = 'The email address is allready registered. Are you trying to cheat?';
 	}
 	else{ 
 		data.counter = data.counter + 1;
+		data.user.push({'email': user.email, 'name': user.name, 'place': data.counter});
 		jsonfile.writeFileSync(file, data)
 
 		// Check for winning password
@@ -140,14 +146,14 @@ app.post('/checkwinner', (req, res) => {
 	  	else{
 	  		message = "Of course you are a winner but you are not one of the lucky three. Your position is: " +  data.counter;
 	  	}
+	  	 
+	  	mail = createMail(user.name, data.counter, secret_key);
+  	
+  		sendConfirmMail(user, res, mail)
 	}
 	console.log(message)
-  	old_IP = IP;
  	
- 	console.log(user)
-  	mail = createMail(user.name, data.counter, secret_key);
-  	
-  	sendConfirmMail(user, res, mail)
+
   	res.json({'result':message})
 });
 

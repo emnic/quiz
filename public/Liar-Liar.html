@@ -6,23 +6,22 @@
 {{message}}
 <br>
 <br>
-<div class="row">	
-	<form ng-submit="checkWinner()" name="form">
-		<fieldset class="form-group">
-			<label ng-if="!show" for="inputUser">Name:</label>
-			<br>
-			<input ng-if="!show" class="form-control" placeholder="Input name" type="text" id="name" ng-model="name"/>
-		</fieldset>
-		<fieldset class="form-group">
-			<label ng-if="!show" for="inputUser">E-mail:</label>
-			<br>
-			<input ng-if="!show" class="form-control" placeholder="Input secret e-mail" type="email" id="email" ng-model="email"/>
-		</fieldset>
-		<p>
-		<button ng-if="!show" type="submit" class="btn btn-primary pull-center">Winner?</button>
-		</p>
-	</form>	
+<div class="row">
+	<div class="col-lg-12">	
+		<form ng-submit="checkWinner()" name="form">
+			<fieldset class="form-group">
+				<label for="inputUser">Name:</label>
+				<br>
+				<input class="form-control" placeholder="Input name" type="text" id="guess" ng-model="name" required/>
+				<br>
+				<label for="inputUser">E-mail:</label>
+				<br>
+				<input class="form-control" placeholder="Input name" type="email" id="guess2" ng-model="mail" required/>
+			</fieldset>
+			<p>
+			<button type="submit" class="btn btn-primary pull-center">Winner?</button>
+		</form>	
+	</div>
 </div>
-
 <br>
 <br>
