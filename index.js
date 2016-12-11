@@ -126,7 +126,8 @@ app.post('/checkwinner', (req, res) => {
 	var file = 'data.json';
 	var data = jsonfile.readFileSync(file);
 	var secret_key = '';
-	duplicate = false;
+	var mailstatus = false;
+	var duplicate = false;
 
 	for(i = 0; i < data.user.length; i++){
 		if(data.user[i].email === user.email){
@@ -163,11 +164,12 @@ app.post('/checkwinner', (req, res) => {
 	  	mail = createMail(user.name, data.counter, secret_key);
   	
   		sendConfirmMail(user, res, mail)
+  		mailstatus = true;
 	}
 	console.log(message)
  	
 
-  	res.json({'result':message})
+  	res.json({'result':message, 'mailstatus':mailstatus})
 });
 
 function sendConfirmMail(user, res, mail) {

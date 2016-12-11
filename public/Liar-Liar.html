@@ -10,16 +10,16 @@
 	<div class="col-lg-12">	
 		<form ng-submit="checkWinner()" name="form">
 			<fieldset class="form-group">
-				<label for="inputUser">Name:</label>
+				<label ng-show="!show" for="inputUser">Name:</label>
 				<br>
-				<input class="form-control" placeholder="Input name" type="text" id="guess" ng-model="name" required/>
+				<input ng-show="!show" class="form-control" placeholder="Input name" type="text" id="guess" ng-model="name" required/>
 				<br>
-				<label for="inputUser">E-mail:</label>
+				<label ng-show="!show" for="inputUser">E-mail:</label>
 				<br>
-				<input class="form-control" placeholder="Input name" type="email" id="guess2" ng-model="mail" required/>
+				<input ng-show="!show" class="form-control" placeholder="Input email" type="email" id="guess2" ng-model="mail" required/>
 			</fieldset>
 			<p>
-			<button type="submit" class="btn btn-primary pull-center">Winner?</button>
+			<button ng-show="!show" type="submit" class="btn btn-primary pull-center">Winner?</button>
 		</form>	
 	</div>
 </div>

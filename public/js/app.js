@@ -47,12 +47,14 @@ quizApp.controller('mainController', function($scope, $http, $location) {
 
         });        
     };
-    $scope.checkWinner = function (){
-        $scope.show = true;
+    $scope.checkWinner = function (){ 
         $http.post('/checkwinner', {'name':$scope.name, 'email':$scope.mail})
             .success(function(response){
 
-                $scope.message = response.result          
+                $scope.message = response.result
+                if(response.mailstatus){
+                   $scope.show = true; 
+                }          
             })
             .error(function(){
 
