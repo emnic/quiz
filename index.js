@@ -3,9 +3,17 @@ var bodyParser= require('body-parser')
 var path = require('path');
 var jsonfile = require('jsonfile')
 var nodemailer = require('nodemailer');
+var session = require('express-session');
 
 var app = express();
 
+app.use(session({
+    secret: 'cookie_secret',
+    name: 'awquiz',
+    proxy: true,
+    resave: true,
+    saveUninitialized: true
+}));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname, 'public')));
@@ -15,29 +23,33 @@ var guess_counter = 0;
 var prev_guess = 0;
 var cons_corr_counter = 0;
 var old_IP = 0;
+var sess;
 
 app.get('/guessreset', (req, res) => {
 
-  // Calculate the secret number
-  secret_number = Math.floor((Math.random() * 100) + 1)
-  guess_counter = 0;
-  cons_corr_counter = 0;
+  sess = req.session;
 
-  console.log("Secret number: " + secret_number);
+  // Calculate the secret number
+  sess.secret_number = Math.floor((Math.random() * 100) + 1)
+  sess.guess_counter = 0;
+  sess.cons_corr_counter = 0;
+  sess.prev_guess = 0;
+  console.log("Session: " + sess.id + ", Secret number: " + sess.secret_number);
   res.json({'result':200})
 });
 
 app.post('/guess', (req, res) => {
   // Input validation
   var user_guess = req.body.guess;
+  sess = req.session;
 
-  console.log("Secret number: " + secret_number);
-  console.log("User guess: " + user_guess);
+  console.log("Session: " + sess.id + ", Secret number: " + sess.secret_number);
+  console.log("Session: " + sess.id + ", User guess: " + user_guess);
 
   var result = 'Nope!!!';
 
   if(user_guess === 'help'){
-  	if(guess_counter < 100){
+  	if(sess.guess_counter < 100){
   		result = 'Have you given up allready'
   	}
   	else{ 
@@ -46,20 +58,21 @@ app.post('/guess', (req, res) => {
   }
   else{
 	  user_guess = parseInt(user_guess, 10);
-	  if(prev_guess === user_guess){
+	  if(sess.prev_guess === user_guess){
 	  	result = 'Same as last guess, input a new number'
 	  }
-	  else if(guess_counter % 8 === 7 && cons_corr_counter > 0){
-	  	cons_corr_counter = 0;
-	  	guess_counter = 0;
+	  else if(sess.guess_counter % 8 === 7 && sess.cons_corr_counter > 0){
+	  	sess.cons_corr_counter = 0;
+	  	sess.guess_counter = 0;
 	  	result = 'Was it only luck the last time you found the number. Resetting the "Correct guesses in a row" counter';
 	  }   
-	  else if(user_guess === secret_number){
-	  	cons_corr_counter += 1; 
-	  	if(cons_corr_counter < 3){
-	  		secret_number = Math.floor((Math.random() * 100) + 1)
-	  		console.log(secret_number)
-	  		guess_counter = 0;
+	  else if(user_guess === sess.secret_number){
+	  	sess.cons_corr_counter += 1; 
+	  	if(sess.cons_corr_counter < 3){
+	  		sess.secret_number = Math.floor((Math.random() * 100) + 1)
+	  		console.log("Session: " + sess.id + ", Secret number: " + sess.secret_number);
+	  		sess.guess_counter = 0;
+	  		sess.prev_guess = 0;
 		  	result = 'Congratulations! You found the secret number was it luck, or can you do it again?'
 	  	}
 	  	else{
@@ -71,23 +84,23 @@ app.post('/guess', (req, res) => {
 	  	if(user_guess < 1 || user_guess > 100){
 	  		result = 'Hey!! I said between 1 and 100'
 	  	} 
-	    else if(user_guess < secret_number){
-	      result = guess_counter % 4 === 3 ? 'Too high':'Too low'
+	    else if(user_guess < sess.secret_number){
+	      result = sess.guess_counter % 4 === 3 ? 'Too high':'Too low'
 	    }
-		else if(user_guess > secret_number){
-		  result = guess_counter % 4 === 3 ? 'Too low':'Too high'
+		else if(user_guess > sess.secret_number){
+		  result = sess.guess_counter % 4 === 3 ? 'Too low':'Too high'
 		}
 
-		guess_counter += 1;
+		sess.guess_counter += 1;
 	  }
   }
 
-  prev_guess = user_guess;
+  sess.prev_guess = user_guess;
   
 
   res.json({'result':result,
-			'guess_counter': guess_counter,
-			'cons_corr_counter': cons_corr_counter})
+			'guess_counter': sess.guess_counter,
+			'cons_corr_counter': sess.cons_corr_counter})
 })
 app.post('/checknav', (req, res) => {
 
